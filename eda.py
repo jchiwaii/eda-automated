@@ -1,7 +1,10 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
 from scipy import stats
+from pandas_profiling import ProfileReport
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -28,9 +31,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 def detect_data_type(series):
-    """
-    Detailed data type detection for each column
-    """
     if pd.api.types.is_numeric_dtype(series):
         if series.nunique() <= 10:
             return "Discrete Numeric"
@@ -50,15 +50,11 @@ def detect_data_type(series):
     return "Other"
 
 def calculate_descriptive_stats(series, data_type):
-    """
-    Calculate comprehensive descriptive statistics based on data type
-    """
     stats_dict = {
         "count": len(series),
         "unique_values": series.nunique(),
         "missing_values": series.isnull().sum(),
         "missing_percentage": (series.isnull().sum() / len(series)) * 100,
-        "memory_usage": series.memory_usage(deep=True) / 1024,  # in KB
     }
 
     if data_type in ["Integer", "Continuous Numeric", "Discrete Numeric"]:
@@ -80,7 +76,6 @@ def calculate_descriptive_stats(series, data_type):
         }
         stats_dict.update(numeric_stats)
 
-        # Add outlier detection
         q1 = series.quantile(0.25)
         q3 = series.quantile(0.75)
         iqr = q3 - q1
@@ -101,7 +96,6 @@ def calculate_descriptive_stats(series, data_type):
         }
         stats_dict.update(categorical_stats)
 
-        # Add frequency distribution
         value_counts = series.value_counts()
         stats_dict["value_distribution"] = value_counts.to_dict()
         stats_dict["entropy"] = stats.entropy(value_counts) if len(value_counts) > 1 else 0
@@ -120,19 +114,13 @@ def calculate_descriptive_stats(series, data_type):
     return stats_dict
 
 def analyze_relationships(df):
-    """
-    Analyze relationships between variables
-    """
     relationships = {}
-    
-    # Identify numeric columns
     numeric_cols = df.select_dtypes(include=[np.number]).columns
     
     if len(numeric_cols) > 1:
-        # Correlation analysis
         correlations = df[numeric_cols].corr()
+        relationships['correlations'] = correlations
         
-        # Find strong correlations (absolute value > 0.7)
         strong_correlations = []
         for i in range(len(correlations.columns)):
             for j in range(i):
@@ -147,9 +135,6 @@ def analyze_relationships(df):
     return relationships
 
 def analyze_data_quality(df):
-    """
-    Comprehensive data quality analysis
-    """
     quality_report = {
         "completeness": {
             "total_missing": df.isnull().sum().sum(),
@@ -165,19 +150,15 @@ def analyze_data_quality(df):
         }
     }
     
-    # Check for potential data quality issues
     quality_report["potential_issues"] = []
     
-    # Check for suspicious patterns
     for column in df.columns:
-        # Check for columns with too many missing values
         missing_pct = (df[column].isnull().sum() / len(df)) * 100
         if missing_pct > 50:
             quality_report["potential_issues"].append(
                 f"Column '{column}' has {missing_pct:.2f}% missing values"
             )
             
-        # Check for columns with too many unique values
         unique_pct = (df[column].nunique() / len(df)) * 100
         if unique_pct > 95 and len(df) > 100:
             quality_report["potential_issues"].append(
@@ -190,34 +171,27 @@ def main():
     st.title("📊 Comprehensive EDA Tool")
     st.write("Upload your data for detailed exploratory data analysis")
 
-    # File upload
     uploaded_file = st.file_uploader("Choose a CSV or Excel file", type=['csv', 'xlsx'])
     
     if uploaded_file is not None:
         try:
-            # Load data
             if uploaded_file.name.endswith('.csv'):
                 df = pd.read_csv(uploaded_file)
             else:
                 df = pd.read_excel(uploaded_file)
             
-            # Dataset Overview
             st.header("📋 Dataset Overview")
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
             with col1:
                 st.metric("Rows", df.shape[0])
             with col2:
                 st.metric("Columns", df.shape[1])
             with col3:
                 st.metric("Total Missing Values", df.isnull().sum().sum())
-            with col4:
-                st.metric("Memory Usage (MB)", df.memory_usage(deep=True).sum() / 1024 / 1024)
 
-            # Data Quality Analysis
             st.header("🔍 Data Quality Analysis")
             quality_report = analyze_data_quality(df)
             
-            # Display data quality metrics
             st.subheader("Completeness")
             col1, col2 = st.columns(2)
             with col1:
@@ -232,23 +206,15 @@ def main():
             with col2:
                 st.metric("Duplicate Percentage", f"{quality_report['uniqueness']['duplicate_percentage']:.2f}%")
 
-            # Variable Analysis
             st.header("🔢 Variable Analysis")
-            
-            # Allow user to select variable
             selected_column = st.selectbox("Select a variable to analyze:", df.columns)
             
             if selected_column:
-                # Detect data type
                 data_type = detect_data_type(df[selected_column])
-                
-                # Calculate statistics
                 stats = calculate_descriptive_stats(df[selected_column], data_type)
                 
-                # Display variable information
                 st.subheader(f"Analysis of {selected_column}")
                 
-                # Basic Information
                 st.write("**Basic Information**")
                 cols = st.columns(3)
                 with cols[0]:
@@ -258,10 +224,7 @@ def main():
                 with cols[1]:
                     st.write(f"Missing Values: {stats['missing_values']}")
                     st.write(f"Missing Percentage: {stats['missing_percentage']:.2f}%")
-                with cols[2]:
-                    st.write(f"Memory Usage: {stats['memory_usage']:.2f} KB")
 
-                # Display type-specific statistics
                 if data_type in ["Integer", "Continuous Numeric", "Discrete Numeric"]:
                     st.write("**Descriptive Statistics**")
                     cols = st.columns(3)
@@ -313,10 +276,15 @@ def main():
                         st.write(f"Most Common Month: {stats['most_common_month']}")
                         st.write(f"Most Common Weekday: {stats['most_common_weekday']}")
 
-            # Variable Relationships
             st.header("🔗 Variable Relationships")
             relationships = analyze_relationships(df)
             
+            if relationships.get('correlations') is not None:
+                st.subheader("Correlation Heatmap")
+                fig, ax = plt.subplots()
+                sns.heatmap(relationships['correlations'], annot=True, cmap='coolwarm', ax=ax)
+                st.pyplot(fig)
+
             if relationships.get('strong_correlations'):
                 st.subheader("Strong Correlations (|r| > 0.7)")
                 for corr in relationships['strong_correlations']:
@@ -324,11 +292,14 @@ def main():
             else:
                 st.write("No strong correlations found between numeric variables.")
 
-            # Data Quality Issues
             if quality_report["potential_issues"]:
                 st.header("⚠️ Potential Data Quality Issues")
                 for issue in quality_report["potential_issues"]:
                     st.warning(issue)
+
+            st.header("📊 Automated EDA Report")
+            profile = ProfileReport(df, title="Pandas Profiling Report", explorative=True)
+            st_profile_report(profile)
 
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
