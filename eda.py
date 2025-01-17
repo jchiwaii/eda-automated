@@ -14,46 +14,44 @@ st.set_page_config(
 
 # Custom CSS for modern styling
 st.markdown("""
-    <style>
-    /* Your CSS code here */
     .main {
-        font-family: 'Roboto', sans-serif; /* Modern font */
-        color: #333; /* Dark text for contrast */
-        max-width: 1200px; /* Limit content width */
-        margin: 0 auto; /* Center the content */
+        font-family: 'Roboto', sans-serif;
+        color: #333;
+        max-width: 1200px;
+        margin: 0 auto;
         padding: 20px;
     }
     h1, h2, h3, h4, h5, h6 {
-         color: #007bff; /* Primary color for headings */
-        margin-top: 25px; /* Space above headings */
+         color: #007bff;
+        margin-top: 25px;
     }
     .st-header, .st-subheader {
-        color: #007bff; /* Apply primary color to streamlit headers */
+        color: #007bff;
     }
 
     .metric-container {
-        background-color: #f0f8ff; /* Very light background */
+        background-color: #f0f8ff;
         padding: 15px;
-        border-radius: 8px; /* Rounded corners */
+        border-radius: 8px;
         margin: 10px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     }
 
     .stMetricLabel {
-        font-weight: bold; /* Bold metric labels */
-        color: #555; /* Slightly lighter text color */
+        font-weight: bold;
+        color: #555;
     }
 
 
     div[data-baseweb="select"] > div {
-      border-color: #ddd; /* Slightly less dark border for selectboxes */
+      border-color: #ddd;
     }
     div[data-baseweb="select"]  {
          margin-bottom: 20px;
     }
 
     .stButton > button {
-        background-color: #28a745; /* Success button color */
+        background-color: #28a745;
         color: white;
         border: none;
         border-radius: 5px;
@@ -62,49 +60,48 @@ st.markdown("""
         transition: background-color 0.3s ease;
     }
     .stButton > button:hover {
-        background-color: #218838; /* Darker green on hover */
+        background-color: #218838;
     }
 
 
      div[data-baseweb="file-uploader"] > div{
-        border: 1px dashed #ccc; /* Dashed border for file uploader */
+        border: 1px dashed #ccc;
         padding: 10px;
         border-radius: 5px;
     }
 
     .stAlert {
-        background-color: #ffebee; /* Light red background for warnings */
+        background-color: #ffebee;
         border: 1px solid #ef9a9a;
-        color: #b71c1c; /* Dark red for warnings */
+        color: #b71c1c;
         padding: 10px;
         border-radius: 5px;
         margin: 10px 0;
     }
     .stProgress {
-        margin-top: 10px; /* Add space above progress bars */
+        margin-top: 10px;
     }
 
 
      .stText {
-         margin-top: 10px; /* Adjust top margin for readability */
+         margin-top: 10px;
      }
      .stText strong{
          font-weight: 500;
          color: #444;
      }
-    .css-10trblm { /* Text color of the values in Metric */
+    .css-10trblm {
          color: #444;
     }
-     .css-1d391kg{ /* Style the whole containers in a column */
-        padding: 10px; /* Padding around containers */
-        border-radius: 8px; /* Rounded corners for containers */
-        background-color: #f8f9fa; /* Light background */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075); /* Light box-shadow */
+     .css-1d391kg{
+        padding: 10px;
+        border-radius: 8px;
+        background-color: #f8f9fa;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
     }
-    .css-1j0k4f7{ /* Style the containers of columns */
-    padding: 10px; /* Padding around the column */
+    .css-1j0k4f7{
+    padding: 10px;
     }
-    </style>
 """, unsafe_allow_html=True)
 
 def detect_data_type(series):
