@@ -14,94 +14,102 @@ st.set_page_config(
 
 # Custom CSS for modern styling
 st.markdown("""
-    .main {
-        font-family: 'Roboto', sans-serif;
-        color: #333;
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-    }
-    h1, h2, h3, h4, h5, h6 {
-         color: #007bff;
-        margin-top: 25px;
-    }
-    .st-header, .st-subheader {
-        color: #007bff;
-    }
+    <style>
+        .main {
+            font-family: 'Roboto', sans-serif;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-    .metric-container {
-        background-color: #f0f8ff;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+        h1, h2, h3, h4, h5, h6 {
+            color: #007bff;
+            margin-top: 25px;
+        }
 
-    .stMetricLabel {
-        font-weight: bold;
-        color: #555;
-    }
+        .st-header, .st-subheader {
+            color: #007bff;
+        }
 
+        .metric-container {
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    div[data-baseweb="select"] > div {
-      border-color: #ddd;
-    }
-    div[data-baseweb="select"]  {
-         margin-bottom: 20px;
-    }
+        .stMetricLabel {
+            font-weight: bold;
+            color: #555;
+        }
 
-    .stButton > button {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-    .stButton > button:hover {
-        background-color: #218838;
-    }
+        div[data-baseweb="select"] > div {
+            border-color: #ddd;
+        }
 
+        div[data-baseweb="select"] {
+            margin-bottom: 20px;
+        }
 
-     div[data-baseweb="file-uploader"] > div{
-        border: 1px dashed #ccc;
-        padding: 10px;
-        border-radius: 5px;
-    }
+        .stButton > button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
 
-    .stAlert {
-        background-color: #ffebee;
-        border: 1px solid #ef9a9a;
-        color: #b71c1c;
-        padding: 10px;
-        border-radius: 5px;
-        margin: 10px 0;
-    }
-    .stProgress {
-        margin-top: 10px;
-    }
+        .stButton > button:hover {
+            background-color: #218838;
+        }
 
+        div[data-baseweb="file-uploader"] > div {
+            border: 1px dashed #ccc;
+            padding: 10px;
+            border-radius: 5px;
+        }
 
-     .stText {
-         margin-top: 10px;
-     }
-     .stText strong{
-         font-weight: 500;
-         color: #444;
-     }
-    .css-10trblm {
-         color: #444;
-    }
-     .css-1d391kg{
-        padding: 10px;
-        border-radius: 8px;
-        background-color: #f8f9fa;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
-    }
-    .css-1j0k4f7{
-    padding: 10px;
-    }
+        .stAlert {
+            background-color: #ffebee;
+            border: 1px solid #ef9a9a;
+            color: #b71c1c;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .stProgress {
+            margin-top: 10px;
+        }
+
+        .stText {
+            margin-top: 10px;
+        }
+
+        .stText strong {
+            font-weight: 500;
+            color: #444;
+        }
+
+        .css-10trblm {
+            color: #444;
+        }
+
+        .css-1d391kg {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
+        }
+
+        .css-1j0k4f7 {
+            padding: 10px;
+        }
+    </style>
 """, unsafe_allow_html=True)
 
 def detect_data_type(series):
